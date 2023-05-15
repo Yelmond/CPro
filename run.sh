@@ -32,6 +32,11 @@ if [ "$1" == "setup" ]; then
 
 elif [ "$1" == "project" ]; then
 
+	if [ "$2" == "open" ]; then
+		start "${CPRO_WORK}/vs/project/CPro.sln"
+		exit 0
+	fi
+
 	${CPRO_CMAKE} --preset $2 || exit $?
 
 elif [ "$1" == "build" ]; then
@@ -40,7 +45,7 @@ elif [ "$1" == "build" ]; then
 
 elif [ "$1" == "run" ]; then
 
-	ls || exit $?
+	"${CPRO_WORK}/vs/project/src/app/Debug/app.exe" || exit $?
 
 elif [ "$1" == "reset-local" ]; then
 

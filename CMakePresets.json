@@ -16,14 +16,17 @@
 				"CMAKE_EXPORT_COMPILE_COMMANDS": "YES"
 			},
 			"environment": {
-				"PATH": ".local/ninja:$penv{PATH}"
+				"PATH": "${sourceDir}/.local/cmake/bin:$penv{PATH}"
 			}
 		},
 		{
 			"name": "ninja",
 			"inherits": "base",
 			"hidden": false,
-			"generator": "Ninja Multi-Config"
+			"generator": "Ninja Multi-Config",
+			"cacheVariables": {
+				"CMAKE_MAKE_PROGRAM": ".local/ninja/ninja"
+			}
 		},
 		{
 			"name": "vs",
@@ -36,36 +39,26 @@
 	],
 	"buildPresets": [
 		{
-			"name": "ninja-debug",
+			"name": "ninja",
 			"configurePreset": "ninja",
-			"buildCommandArgs": [
-				"--target", "all",
-				"--config", "Debug"
-			]
+			"configuration": "Debug",
+			"targets": [ "all" ]
 		},
 		{
 			"name": "ninja-release",
-			"configurePreset": "ninja",
-			"buildCommandArgs": [
-				"--target", "all",
-				"--config", "Release"
-			]
+			"inherits": "ninja",
+			"configuration": "Release"
 		},
 		{
-			"name": "vs-debug",
+			"name": "vs",
 			"configurePreset": "vs",
-			"buildCommandArgs": [
-				"--target", "ALL_BUILD",
-				"--config", "Debug"
-			]
+			"configuration": "Debug",
+			"targets": [ "ALL_BUILD" ]
 		},
 		{
 			"name": "vs-release",
-			"configurePreset": "vs",
-			"buildCommandArgs": [
-				"--target", "ALL_BUILD",
-				"--config", "Release"
-			]
+			"inherits": "vs",
+			"configuration": "Release"
 		}
 	]
 }
