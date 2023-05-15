@@ -33,7 +33,11 @@ if [ "$1" == "setup" ]; then
 elif [ "$1" == "project" ]; then
 
 	if [ "$2" == "open" ]; then
-		start "${CPRO_WORK}/vs/project/CPro.sln"
+		if [ -f "${CPRO_WORK}/vs/project/CPro.sln" ]; then
+			start "${CPRO_WORK}/vs/project/CPro.sln"
+		else
+			"C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\devenv.exe" . &
+		fi
 		exit 0
 	fi
 
