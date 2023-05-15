@@ -25,7 +25,7 @@
 			"hidden": false,
 			"generator": "Ninja Multi-Config",
 			"cacheVariables": {
-				"CMAKE_MAKE_PROGRAM": ".local/ninja/ninja"
+				"CMAKE_MAKE_PROGRAM": "${sourceDir}/.local/ninja/ninja"
 			}
 		},
 		{
