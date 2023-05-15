@@ -1,0 +1,71 @@
+{
+	"version": 6,
+	"cmakeMinimumRequired": {
+		"major": 3,
+		"minor": 26,
+		"patch": 0
+	},
+	"configurePresets": [
+		{
+			"name": "base",
+			"hidden": true,
+			"toolchainFile": ".local/vcpkg/scripts/buildsystems/vcpkg.cmake",
+			"binaryDir": "${sourceDir}/.work/${presetName}/project",
+			"installDir": "${sourceDir}/.work/${presetName}/install",
+			"cacheVariables": {
+				"CMAKE_EXPORT_COMPILE_COMMANDS": "YES"
+			},
+			"environment": {
+				"PATH": ".local/ninja:$penv{PATH}"
+			}
+		},
+		{
+			"name": "ninja",
+			"inherits": "base",
+			"hidden": false,
+			"generator": "Ninja Multi-Config"
+		},
+		{
+			"name": "vs",
+			"inherits": "base",
+			"hidden": false,
+			"generator": "Visual Studio 17 2022",
+			"architecture": "x64",
+			"toolset": "host=x64"
+		}
+	],
+	"buildPresets": [
+		{
+			"name": "ninja-debug",
+			"configurePreset": "ninja",
+			"buildCommandArgs": [
+				"--target", "all",
+				"--config", "Debug"
+			]
+		},
+		{
+			"name": "ninja-release",
+			"configurePreset": "ninja",
+			"buildCommandArgs": [
+				"--target", "all",
+				"--config", "Release"
+			]
+		},
+		{
+			"name": "vs-debug",
+			"configurePreset": "vs",
+			"buildCommandArgs": [
+				"--target", "ALL_BUILD",
+				"--config", "Debug"
+			]
+		},
+		{
+			"name": "vs-release",
+			"configurePreset": "vs",
+			"buildCommandArgs": [
+				"--target", "ALL_BUILD",
+				"--config", "Release"
+			]
+		}
+	]
+}

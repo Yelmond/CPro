@@ -1,5 +1,5 @@
-cmake_minimum_required( VERSION 3.16 )
+cmake_minimum_required( VERSION 3.26 )
 
 project( CPro )
 
-#add_executable( dots Main.cpp )
+add_subdirectory( src )
