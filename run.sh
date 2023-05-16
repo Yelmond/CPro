@@ -10,8 +10,6 @@ export CPRO_CMAKE="${CPRO_LOCAL}/cmake/bin/cmake.exe"
 export CPRO_NINJA="${CPRO_LOCAL}/ninja/ninja.exe"
 export CPRO_VCPKG="${CPRO_LOCAL}/vcpkg/vcpkg.exe"
 
-#export PATH="${CPRO_LOCAL}/cmake/bin:${CPRO_LOCAL}/ninja:${CPRO_LOCAL}/vcpkg:${PATH}"
-
 if [ "$1" == "setup" ]; then
 
 	mkdir -p ${CPRO_LOCAL}
@@ -36,7 +34,7 @@ elif [ "$1" == "project" ]; then
 		if [ -f "${CPRO_WORK}/vs/project/CPro.sln" ]; then
 			start "${CPRO_WORK}/vs/project/CPro.sln"
 		else
-			"C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\devenv.exe" . &
+			"C:\Program Files\Microsoft Visual Studio\2022\Professional\Common7\IDE\devenv.exe" . &
 		fi
 		exit 0
 	fi
