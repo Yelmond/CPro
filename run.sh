@@ -28,16 +28,25 @@ if [ "$1" == "setup" ]; then
 
 	cd ../..
 
-elif [ "$1" == "project" ]; then
+elif [ "$1" == "open" ]; then
 
-	if [ "$2" == "open" ]; then
+	if [ "$2" == "sln" ]; then
 		if [ -f "${CPRO_WORK}/vs/project/CPro.sln" ]; then
 			start "${CPRO_WORK}/vs/project/CPro.sln"
 		else
-			"C:\Program Files\Microsoft Visual Studio\2022\Professional\Common7\IDE\devenv.exe" . &
+			printf "CPro.sln not found.\n"
 		fi
-		exit 0
+	elif [ "$2" == "vs" ]; then
+		if [ -f "C:\Program Files\Microsoft Visual Studio\2022\Professional\Common7\IDE\devenv.exe" ]; then
+			"C:\Program Files\Microsoft Visual Studio\2022\Professional\Common7\IDE\devenv.exe" . &
+		elif [ -f "C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\devenv.exe" ]; then
+			"C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\devenv.exe" . &
+		else
+			printf "Visual Studio not found.\n"
+		fi
 	fi
+
+elif [ "$1" == "project" ]; then
 
 	${CPRO_CMAKE} --preset $2 || exit $?
 
