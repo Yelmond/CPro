@@ -1,6 +1,6 @@
 // Global module fragment where #includes can happen
 module;
-#include <fmt/core.h>
+import <fmt/core.h>;
 
 // first thing after the Global module fragment must be a module command
 export module modlib;
@@ -17,5 +17,5 @@ ModLibPrinter::ModLibPrinter() = default;
 ModLibPrinter::~ModLibPrinter() = default;
 
 void ModLibPrinter::printStuff() const {
-	fmt::print( "Hello, world!\n" );
+	fmt::print( "Hello, worlds!\n" );
 }
