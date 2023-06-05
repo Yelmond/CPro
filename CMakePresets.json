@@ -13,6 +13,7 @@
 			"binaryDir": "${sourceDir}/.work/${presetName}/project",
 			"installDir": "${sourceDir}/.work/${presetName}/install",
 			"cacheVariables": {
+				"CMAKE_MODULE_PATH": "${sourceDir}/cmake",
 				"CMAKE_EXPORT_COMPILE_COMMANDS": "YES"
 			},
 			"environment": {

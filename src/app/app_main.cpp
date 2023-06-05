@@ -1,6 +1,8 @@
-#include <fmt/core.h>
+import modlib;
 
 int main() {
-	fmt::print( "Hello, world!\n" );
+	ModLibPrinter mlp;
+	mlp.printStuff();
+
 	return 0;
 }
