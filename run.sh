@@ -56,7 +56,7 @@ elif [ "$1" == "build" ]; then
 
 elif [ "$1" == "run" ]; then
 
-	"${CPRO_WORK}/vs/project/src/app/Debug/app.exe" || exit $?
+	"${CPRO_WORK}/$2/project/src/app/Debug/app.exe" || exit $?
 
 elif [ "$1" == "reset-local" ]; then
 
