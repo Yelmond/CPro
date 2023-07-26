@@ -10,60 +10,10 @@ export CPRO_CMAKE="${CPRO_LOCAL}/cmake/bin/cmake.exe"
 export CPRO_NINJA="${CPRO_LOCAL}/ninja/ninja.exe"
 export CPRO_VCPKG="${CPRO_LOCAL}/vcpkg/vcpkg.exe"
 
-if [ "$1" == "setup" ]; then
-
-	mkdir -p ${CPRO_LOCAL}
-	cd ${CPRO_LOCAL}
-
-	curl -L -O https://github.com/Kitware/CMake/releases/download/v${CPRO_CMAKE_VERSION}/cmake-${CPRO_CMAKE_VERSION}-windows-x86_64.zip || exit $?
-	unzip -q cmake-${CPRO_CMAKE_VERSION}-windows-x86_64.zip || exit $?
-	mv cmake-${CPRO_CMAKE_VERSION}-windows-x86_64 cmake || exit $?
-
-	curl -L -O https://github.com/ninja-build/ninja/releases/download/v${CPRO_NINJA_VERSION}/ninja-win.zip || exit $?
-	unzip -q ninja-win.zip -d ninja || exit $?
-
-	git clone --depth=1 https://github.com/Microsoft/vcpkg.git || exit $?
-	cd vcpkg
-	./bootstrap-vcpkg.bat -disableMetrics || exit $?
-
-	cd ../..
-
-elif [ "$1" == "open" ]; then
-
-	if [ "$2" == "sln" ]; then
-		if [ -f "${CPRO_WORK}/vs/project/CPro.sln" ]; then
-			start "${CPRO_WORK}/vs/project/CPro.sln"
-		else
-			printf "CPro.sln not found.\n"
-		fi
-	elif [ "$2" == "vs" ]; then
-		if [ -f "C:\Program Files\Microsoft Visual Studio\2022\Professional\Common7\IDE\devenv.exe" ]; then
-			"C:\Program Files\Microsoft Visual Studio\2022\Professional\Common7\IDE\devenv.exe" . &
-		elif [ -f "C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\devenv.exe" ]; then
-			"C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\devenv.exe" . &
-		else
-			printf "Visual Studio not found.\n"
-		fi
-	fi
-
-elif [ "$1" == "project" ]; then
-
-	${CPRO_CMAKE} --preset $2 || exit $?
-
-elif [ "$1" == "build" ]; then
-
-	${CPRO_CMAKE} --build --preset $2 || exit $?
-
-elif [ "$1" == "run" ]; then
-
-	"${CPRO_WORK}/$2/project/src/app/Debug/app.exe" || exit $?
-
-elif [ "$1" == "reset-local" ]; then
-
-	rm -rf ${CPRO_LOCAL} || exit $?
-
-elif [ "$1" == "reset-work" ]; then
-
-	rm -rf ${CPRO_WORK} || exit $?
-
+if [ "$1" == "help" -o "$1" == "-?" ]; then
+	source shell/help.sh
+	func_help
+else
+	source shell/functions.sh
+	func_$1 ${@:2} || return $?
 fi
