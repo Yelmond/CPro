@@ -53,6 +53,7 @@
 			"**/.git": false,
 		},
 		"editor.autoClosingBrackets": "never",
+		"editor.autoClosingQuotes": "never",
 		"editor.renderWhitespace": "all",
 		"editor.tabSize": 4,
 		"editor.insertSpaces": false
