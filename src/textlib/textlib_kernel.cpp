@@ -1,27 +1,49 @@
 #include "textlib.h"
 #include <iostream>
 
-#include <unicode/ubidi.h>
-#include <unicode/brkiter.h>
+#include <ICU4XBidi.hpp>
+#include <ICU4XDataProvider.hpp>
 
-#include <ft2build.h>
-#include FT_FREETYPE_H
+textlib_EXPORTS std::vector<TextSegment> textSegments;
 
-#include <hb.h>
-#include <hb-ft.h>
+void processText(const char* str) {
+    ICU4XDataProvider dp = ICU4XDataProvider::create_test();
+    auto bidi = ICU4XBidi::create(dp).ok().value();
 
-#include <vector>
+    auto bidi_info = bidi.for_text(str, ICU4XBidi::level_ltr());
+    auto n_para = bidi_info.paragraph_count();
+
+    // Split the reordered paragraph into segments of same directionality
+    for (int i = 0; i < n_para; ++i) {
+        auto para = bidi_info.paragraph_at(i).value();
+        std::string reordered = para.reorder_line(para.range_start(), para.range_end()).ok().value();
+
+        // Split the reordered paragraph into segments of same directionality
+        size_t segment_start = 0;
+        uint8_t previous_level = para.level_at(0);
+        for (size_t j = 1; j < reordered.size(); ++j) {
+            uint8_t current_level = para.level_at(j);
+            if (ICU4XBidi::level_is_rtl(previous_level) != ICU4XBidi::level_is_rtl(current_level)) {
+                textSegments.emplace_back(reordered, segment_start, j, previous_level);
+                segment_start = j;
+            }
+            previous_level = current_level;
+        }
+        textSegments.emplace_back(reordered, segment_start, reordered.size(), previous_level);
+    }
+}
 
 // Our simple Glyph struct which holds information for each glyph
-struct Glyph {
+/*struct Glyph {
 	uint32_t codepoint;
 	int x_advance;
 	int y_advance;
 	int x_offset;
 	int y_offset;
-};
+};*/
 
 // Function that loads and processes a TTF font
+/*
 std::vector<Glyph> processFont(const char* font_path, const char* text, int font_size) {
 	// Initialize FreeType
 	FT_Library ft_library;
@@ -76,35 +98,4 @@ std::vector<Glyph> processFont(const char* font_path, const char* text, int font
 
 	return glyphs;
 }
-
-void processText( const char * str ) {
-	icu::UnicodeString text = icu::UnicodeString::fromUTF8( str );
-
-	// Create a BreakIterator for line breaks
-	icu::BreakIterator* lineBreakIterator = icu::BreakIterator::createLineInstance(icu::Locale::getDefault());
-
-	lineBreakIterator->setText(text);
-
-	int32_t start = lineBreakIterator->first();
-	for (int32_t end = lineBreakIterator->next(); end != icu::BreakIterator::DONE; start = end, end = lineBreakIterator->next()) {
-		icu::UnicodeString line = text.tempSubStringBetween(start, end);
-
-		// Now we perform bidi analysis on each line separately
-		UErrorCode errorCode = U_ZERO_ERROR;
-		icu::BiDi bidi(line.length(), 0, line.getBuffer(), line.length(), NULL, UBIDI_DEFAULT_LTR, &errorCode);
-
-		// Now we can shape each line with HarfBuzz and output the glyphs
-		std::string lineStr;
-		line.toUTF8String(lineStr);
-		std::vector<Glyph> glyphs = processFont(font_path, lineStr.c_str(), font_size);
-		for (const auto& glyph : glyphs) {
-			std::cout << "Glyph codepoint: " << glyph.codepoint
-						<< ", X advance: " << glyph.x_advance
-						<< ", Y advance: " << glyph.y_advance
-						<< ", X offset: " << glyph.x_offset
-						<< ", Y offset: " << glyph.y_offset << std::endl;
-		}
-	}
-
-	delete lineBreakIterator;
-}
+*/
