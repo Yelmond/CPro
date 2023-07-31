@@ -23,11 +23,9 @@ int main() {
             "ב"
             "ג";
 
-    std::cout << "Input: " << str << std::endl;
-
     TextLib textLib;
 
-    textLib.bidi(str);
+    textLib.bidi(str, strlen(str));
 
     for (auto& segment : textLib.textSegments) {
         std::cout << "Segment: " << segment.get_segment_text() << std::endl;
@@ -38,6 +36,7 @@ int main() {
     }
 
     textLib.segmenter();
+    textLib.layout(100);
 
 	return 0;
 }

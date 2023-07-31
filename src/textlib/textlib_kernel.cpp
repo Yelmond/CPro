@@ -6,6 +6,7 @@
 
 #include <ft2build.h>
 #include FT_FREETYPE_H
+#include "ICU4XLineSegmenter.hpp"
 
 #include <hb.h>
 #include <hb-ft.h>
@@ -31,32 +32,39 @@ TextLib::~TextLib() {
     FT_Done_FreeType(ft_library);
 }
 
-void TextLib::bidi(const char* str) {
+void TextLib::bidi(const char* logicalString, size_t len) {
+    if (visualString.capacity() < len) {
+        visualString.reserve(len);
+    }
+    visualString.clear();
+
     ICU4XDataProvider dp = ICU4XDataProvider::create_test();
     auto bidi = ICU4XBidi::create(dp).ok().value();
 
-    auto bidi_info = bidi.for_text(str, ICU4XBidi::level_ltr());
+    auto bidi_info = bidi.for_text(logicalString, ICU4XBidi::level_ltr());
     auto n_para = bidi_info.paragraph_count();
 
     // Split the reordered paragraph into segments of same directionality
+    size_t segment_start = 0;
     for (int i = 0; i < n_para; ++i) {
         auto para = bidi_info.paragraph_at(i).value();
-        // TODO investigate reorder_line_to_writeable
-        std::string reordered = para.reorder_line(para.range_start(), para.range_end()).ok().value();
+        para.reorder_line_to_writeable(para.range_start(), para.range_end(), visualString).ok().value();
 
-        // Split the reordered paragraph into segments of same directionality
-        size_t segment_start = 0;
         uint8_t previous_level = para.level_at(0);
-        for (size_t j = 1; j < reordered.size(); ++j) {
+        for (size_t j = 1; j < visualString.size() - segment_start; ++j) {
             uint8_t current_level = para.level_at(j);
             if (ICU4XBidi::level_is_rtl(previous_level) != ICU4XBidi::level_is_rtl(current_level)) {
-                textSegments.emplace_back(reordered, segment_start, j, previous_level);
-                segment_start = j;
+                textSegments.emplace_back(&visualString, segment_start, segment_start + j, previous_level);
+                segment_start += j;
             }
             previous_level = current_level;
         }
-        textSegments.emplace_back(reordered, segment_start, reordered.size(), previous_level);
+
+        textSegments.emplace_back(&visualString, segment_start, visualString.size(), previous_level);
+        segment_start = visualString.size();
     }
+    std::cout << "logical string: " << logicalString << std::endl;
+    std::cout << "visual string: " << visualString << std::endl;
 }
 
 void TextLib::shape(const char* font_path, const char* text, int font_size) {
@@ -91,7 +99,6 @@ void TextLib::shape(const char* font_path, const char* text, int font_size) {
     hb_glyph_info_t* glyph_info   = hb_buffer_get_glyph_infos(hb_buffer, &glyph_count);
     hb_glyph_position_t* glyph_pos = hb_buffer_get_glyph_positions(hb_buffer, &glyph_count);
 
-    // Fill our glyphs vector with info from HarfBuzz
     for (unsigned int i = 0; i < glyph_count; ++i) {
         Glyph glyph;
         glyph.codepoint = glyph_info[i].codepoint;
@@ -104,6 +111,60 @@ void TextLib::shape(const char* font_path, const char* text, int font_size) {
 }
 
 void TextLib::segmenter() {
-    for(auto& segment : textSegments) {
+    breakpoints.clear();
+
+    ICU4XDataProvider dp = ICU4XDataProvider::create_test(); //TODO should we extract to a class member ?
+    const auto segmenter_auto =
+            ICU4XLineSegmenter::create_auto(dp).ok().value();
+
+    auto iterator = segmenter_auto.segment_utf8(visualString);
+    while (true) {
+        int32_t breakpoint = iterator.next();
+        if (breakpoint == -1) {
+            break;
+        }
+        breakpoints.push_back(breakpoint);
+    }
+}
+
+void TextLib::layout(int width) {
+    int x_Advance = 0;
+    int line_start = 0;
+    auto last_breakpoint = breakpoints.begin();
+
+    for (size_t i = 0; i < glyphs.size(); ++i) {
+        Glyph& glyph = glyphs[i];
+
+        if (x_Advance + glyph.x_advance > width) {
+            auto it = std::upper_bound(last_breakpoint, breakpoints.end(), glyph.codepoint);
+            if (it != breakpoints.begin()){
+                --it;
+                last_breakpoint = it;
+
+                while (glyphs[i].codepoint > *last_breakpoint) {
+                    i--;
+                }
+                layoutLine(line_start, i);
+                line_start = i + 1;
+            }
+            else {
+                // TODO, need to implement word iterator
+                std::cerr << "No breakpoint found before the current cluster" << std::endl;
+            }
+        }
+    }
+}
+
+void TextLib::layoutLine(int start, int end) {
+    // Implement TextAlignement / x_origin / y_origin
+
+    // Left Align
+    int x_origin = 0;
+    for (int i = start; i <= end; ++i) {
+        Glyph& glyph = glyphs[i];
+        glyph.x_origin = x_origin;
+
+        if(i < end)
+            x_origin += glyph.x_advance;
     }
 }
