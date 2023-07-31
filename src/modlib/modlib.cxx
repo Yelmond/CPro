@@ -1,4 +1,5 @@
 // Global module fragment where #includes can happen
+/*
 module;
 import <fmt/core.h>;
 
@@ -19,3 +20,4 @@ ModLibPrinter::~ModLibPrinter() = default;
 void ModLibPrinter::printStuff() const {
 	fmt::print( "Hello, worlds!\n" );
 }
+*/
