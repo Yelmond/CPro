@@ -13,7 +13,7 @@
 #endif
 
 struct TextSegment {
-    const std::string text; // TODO change copy to a reference to the original string
+    const std::string text; // TODO change copy to a reference to the original string (const char *)
     size_t start;
     size_t end;
     uint8_t level;
@@ -28,6 +28,23 @@ struct TextSegment {
 };
 
 
-// TODO why not create a textlib class and make textSegments a member variable instead of a global variable?
-extern textlib_EXPORTS std::vector<TextSegment> textSegments;
-textlib_EXPORTS void processText( const char* str );
+struct Glyph {
+	uint32_t codepoint;
+	int x_advance;
+	int y_advance;
+	int x_offset;
+	int y_offset;
+};
+
+class textlib_EXPORTS TextLib {
+public:
+    TextLib();
+    ~TextLib();
+
+    void bidi(const char* str);
+    void shape(const char* font_path, const char* text, int font_size);
+    void segmenter();
+
+    std::vector<TextSegment> textSegments;
+    std::vector<Glyph> glyphs;
+};

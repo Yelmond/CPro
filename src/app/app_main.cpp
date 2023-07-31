@@ -25,11 +25,19 @@ int main() {
 
     std::cout << "Input: " << str << std::endl;
 
-	processText( str );
+    TextLib textLib;
 
-    for (auto& segment : textSegments) {
+    textLib.bidi(str);
+
+    for (auto& segment : textLib.textSegments) {
         std::cout << "Segment: " << segment.get_segment_text() << std::endl;
     }
+
+    for (auto& segment : textLib.textSegments) {
+        textLib.shape("../../../resources/Roboto-Bold.ttf", segment.get_segment_text().data(), 12);
+    }
+
+    textLib.segmenter();
 
 	return 0;
 }
