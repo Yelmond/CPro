@@ -12,22 +12,6 @@
 	#define textlib_EXPORTS __attribute__( ( visibility( "default" ) ) )
 #endif
 
-struct TextSegment {
-    const std::string* text;
-    size_t start;
-    size_t end;
-    uint8_t level;
-
-    // Constructor
-    TextSegment(const std::string* str, size_t start, size_t end, uint8_t level)
-            : text(str), start(start), end(end), level(level) {}
-
-    std::string_view get_segment_text() const {
-        return std::string_view(text->c_str() + start, end - start);
-    }
-};
-
-
 struct Glyph {
 	uint32_t codepoint;
     int x_origin;
@@ -42,16 +26,12 @@ public:
     TextLib();
     ~TextLib();
 
-    void bidi(const char* logicalString, size_t len);
-    void shape(const char* font_path, const char* text, int font_size);
+    void bidi(const char* src, size_t len);
+    void shape(const char* font_path, int font_size);
+    void shape_segment(const char* font_path, const uint16_t* text, int font_size);
     void segmenter();
     void layout(int width);
     void layoutLine(int start, int end);
 
-    std::vector<TextSegment> textSegments;
     std::vector<Glyph> glyphs;
-
-private:
-    std::string visualString; // TODO should we use char* ?
-    std::vector<int32_t> breakpoints;
 };

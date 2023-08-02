@@ -26,16 +26,12 @@ int main() {
 
     textLib.bidi(str, strlen(str));
 
-    for (auto& segment : textLib.textSegments) {
-        std::cout << "Segment: " << segment.get_segment_text() << std::endl;
-    }
+    textLib.shape("../../../resources/Roboto-Bold.ttf", 12);
 
-    for (auto& segment : textLib.textSegments) {
-        textLib.shape("../../../resources/Roboto-Bold.ttf", segment.get_segment_text().data(), 12);
-    }
-
+    /*
     textLib.segmenter();
     textLib.layout(100);
+*/
 
 	return 0;
 }
