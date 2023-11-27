@@ -2,7 +2,10 @@ project( app )
 
 add_executable( app app_main.cpp )
 
-target_link_libraries( app PRIVATE modlib textlib )
+target_link_libraries( app PRIVATE
+	modlib
+	#textlib
+)
 
 # For each link library set on the app target, include its source directory as an include directory.
 get_target_property( APP_LINK_LIBRARIES app LINK_LIBRARIES )

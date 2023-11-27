@@ -1,12 +1,12 @@
 import modlib;
 
-#include <textlib.h>
+//#include <textlib.h>
 
 int main() {
 	ModLibPrinter mlp;
 	mlp.printStuff();
 
-	processText( "worlds" );
+	//processText( "worlds" );
 
 	return 0;
 }
