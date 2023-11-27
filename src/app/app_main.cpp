@@ -1,10 +1,10 @@
-import modlib;
+//import modlib;
 
 //#include <textlib.h>
 
 int main() {
-	ModLibPrinter mlp;
-	mlp.printStuff();
+	//ModLibPrinter mlp;
+	//mlp.printStuff();
 
 	//processText( "worlds" );
 
