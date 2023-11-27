@@ -15,5 +15,5 @@ if [ "$1" == "help" -o "$1" == "-?" ]; then
 	func_help
 else
 	source shell/functions.sh
-	func_$1 ${@:2} || return $?
+	func_$1 ${@:2} || exit $?
 fi
