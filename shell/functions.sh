@@ -35,14 +35,35 @@ function func_open {
 }
 
 function func_project {
+	if [ -z "$1" ]; then
+		${CPRO_CMAKE} --list-presets || return $?
+		return 1
+	fi
+
 	${CPRO_CMAKE} --preset $1 || return $?
 }
 
 function func_build {
+	if [ -z "$1" ]; then
+		${CPRO_CMAKE} --list-presets || return $?
+		return 1
+	fi
+
 	${CPRO_CMAKE} --build --preset $1 || return $?
 }
 
 function func_run {
+	if [ -z "$1" ]; then
+		${CPRO_CMAKE} --list-presets || return $?
+		return 1
+	fi
+
+	if [ ! -d "${CPRO_WORK}/$1" ]; then
+		echo "Available options:"
+		ls ${CPRO_WORK}
+		return 1
+	fi
+
 	"${CPRO_WORK}/$1/project/src/app/Debug/app.exe" || return $?
 }
 
