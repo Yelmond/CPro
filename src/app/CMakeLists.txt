@@ -5,6 +5,7 @@ add_executable( app app_main.cpp )
 target_link_libraries( app PRIVATE
 	#modlib
 	#textlib
+	widget
 )
 
 # For each link library set on the app target, include its source directory as an include directory.
