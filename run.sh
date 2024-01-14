@@ -3,7 +3,7 @@
 export CPRO_LOCAL=".local"
 export CPRO_WORK=".work"
 
-export CPRO_CMAKE_VERSION="3.26.3"
+export CPRO_CMAKE_VERSION="3.27.9"
 export CPRO_NINJA_VERSION="1.11.1"
 
 export CPRO_CMAKE="${CPRO_LOCAL}/cmake/bin/cmake.exe"
