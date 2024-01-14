@@ -4,6 +4,7 @@
 #include <vector>
 #include <algorithm>
 #include <concepts>
+#include <fmt/format.h>
 
 template< typename T >
 concept WidgetConcept = requires( T a ) {
