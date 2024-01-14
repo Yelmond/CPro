@@ -9,6 +9,12 @@
 		{
 			"name": "base",
 			"hidden": true,
+			"vendor": {
+				"microsoft.com/VisualStudioSettings/CMake/1.0": {
+					"hostOS": ["Windows", "Linux", "Darwin"],
+					"hostArch": ["x64", "arm64"]
+				}
+			},
 			"toolchainFile": ".local/vcpkg/scripts/buildsystems/vcpkg.cmake",
 			"binaryDir": "${sourceDir}/.work/${presetName}/project",
 			"installDir": "${sourceDir}/.work/${presetName}/install",
@@ -20,22 +26,57 @@
 				"PATH": "${sourceDir}/.local/cmake/bin:$penv{PATH}"
 			}
 		},
+
 		{
-			"name": "ninja",
-			"inherits": "base",
-			"hidden": false,
+			"name": "compiler-cl",
+			"hidden": true,
+			"cacheVariables": {
+				"CMAKE_C_COMPILER": "cl",
+				"CMAKE_CXX_COMPILER": "cl"
+			},
+			"condition": {
+				"type": "equals",
+				"lhs": "${hostSystemName}",
+				"rhs": "Windows"
+			}
+		},
+		{
+			"name": "compiler-clang",
+			"hidden": true,
+			"cacheVariables": {
+				"CMAKE_C_COMPILER": "clang",
+				"CMAKE_CXX_COMPILER": "clang++"
+			}
+		},
+
+		{
+			"name": "ninja-base",
+			"hidden": true,
 			"generator": "Ninja Multi-Config",
 			"cacheVariables": {
 				"CMAKE_MAKE_PROGRAM": "${sourceDir}/.local/ninja/ninja"
 			}
 		},
 		{
-			"name": "vs",
-			"inherits": "base",
-			"hidden": false,
+			"name": "ninja",
+			"inherits": [ "base", "ninja-base", "compiler-clang" ],
+			"hidden": false
+		},
+
+		{
+			"name": "vs-base",
+			"hidden": true,
 			"generator": "Visual Studio 17 2022",
-			"architecture": "x64",
-			"toolset": "host=x64"
+			"condition": {
+				"type": "equals",
+				"lhs": "${hostSystemName}",
+				"rhs": "Windows"
+			}
+		},
+		{
+			"name": "vs",
+			"inherits": [ "base", "vs-base", "compiler-cl" ],
+			"hidden": false
 		}
 	],
 	"buildPresets": [

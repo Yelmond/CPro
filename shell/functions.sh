@@ -2,18 +2,38 @@ function func_setup {
 	mkdir -p ${CPRO_LOCAL}
 	cd ${CPRO_LOCAL}
 
-	curl -L -O https://github.com/Kitware/CMake/releases/download/v${CPRO_CMAKE_VERSION}/cmake-${CPRO_CMAKE_VERSION}-windows-x86_64.zip || return $?
-	unzip -q cmake-${CPRO_CMAKE_VERSION}-windows-x86_64.zip || return $?
-	mv cmake-${CPRO_CMAKE_VERSION}-windows-x86_64 cmake || return $?
+	local CMAKE_DOWNLOAD_URL="https://github.com/Kitware/CMake/releases/download/v${CPRO_CMAKE_VERSION}"
+	local NINJA_DOWNLOAD_URL="https://github.com/ninja-build/ninja/releases/download/v${CPRO_NINJA_VERSION}"
 
-	curl -L -O https://github.com/ninja-build/ninja/releases/download/v${CPRO_NINJA_VERSION}/ninja-win.zip || return $?
-	unzip -q ninja-win.zip -d ninja || return $?
+	local OS="$(uname)"
+	if [ "$OS" == "Linux" ]; then
+		source "../shell/functions_linux.sh"
+		func_setup_linux || return $?
+	elif [ "$OS" == "Darwin" ]; then
+		source "../shell/functions_mac.sh"
+		func_setup_mac || return $?
+	elif [[ "$OS" == "MINGW"* || "$OS" == "MSYS"* ]]; then
+		source "../shell/functions_win.sh"
+		func_setup_win || return $?
+	else
+		echo "Unsupported: Unknown operating system: $(uname)"
+		return 1
+	fi
 
 	git clone --depth=1 https://github.com/Microsoft/vcpkg.git || return $?
 	cd vcpkg
-	./bootstrap-vcpkg.bat -disableMetrics || return $?
+	ls -la ../..
+	export VCPKG_DEFAULT_BINARY_CACHE="${CPRO_LOCAL}/vcpkg_archives"
+	if [[ "$OS" == "MINGW"* || "$OS" == "MSYS"* ]]; then
+		./bootstrap-vcpkg.bat -disableMetrics || return $?
+	else
+		./bootstrap-vcpkg.sh -disableMetrics || return $?
+	fi
+	ls -la ../..
+	echo "DONNNN"
 
 	cd ../..
+	ls -la
 }
 
 function func_open {
@@ -68,6 +88,10 @@ function func_run {
 }
 
 function func_br {
+	if [ ! -d "${CPRO_WORK}/$1" ]; then
+		func_project $1 || return $?
+	fi
+
 	func_build $1 || return $?
 	func_run $1 || return $?
 }
