@@ -10,7 +10,7 @@ export CPRO_CMAKE="${CPRO_LOCAL}/cmake/bin/cmake.exe"
 export CPRO_NINJA="${CPRO_LOCAL}/ninja/ninja.exe"
 export CPRO_VCPKG="${CPRO_LOCAL}/vcpkg/vcpkg.exe"
 
-if [ "$1" == "help" -o "$1" == "-?" ]; then
+if [ "$1" == "" -o "$1" == "help" -o "$1" == "-?" ]; then
 	source shell/help.sh
 	func_help
 else
