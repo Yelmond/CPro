@@ -1,7 +1,5 @@
 project( ui_test )
 
-enable_testing()
-
 add_executable( ui_test ui_test_widget.cpp )
 
 find_package( GTest CONFIG REQUIRED )
