@@ -1,2 +1,2 @@
-add_subdirectory( widget )
+add_subdirectory( ui )
 add_subdirectory( app )

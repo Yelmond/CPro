@@ -22,18 +22,14 @@ function func_setup {
 
 	git clone --depth=1 https://github.com/Microsoft/vcpkg.git || return $?
 	cd vcpkg
-	ls -la ../..
 	export VCPKG_DEFAULT_BINARY_CACHE="${CPRO_LOCAL}/vcpkg_archives"
 	if [[ "$OS" == "MINGW"* || "$OS" == "MSYS"* ]]; then
 		./bootstrap-vcpkg.bat -disableMetrics || return $?
 	else
 		./bootstrap-vcpkg.sh -disableMetrics || return $?
 	fi
-	ls -la ../..
-	echo "DONNNN"
 
 	cd ../..
-	ls -la
 }
 
 function func_open {

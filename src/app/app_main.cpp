@@ -1,7 +1,6 @@
-#include <widget.h>
+#include <ui.h>
 
 int main() {
-	widgetise();
-
+	UI::Widget widget;
 	return 0;
 }
