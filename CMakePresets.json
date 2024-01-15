@@ -102,5 +102,35 @@
 			"inherits": "vs",
 			"configuration": "Release"
 		}
+	],
+	"testPresets": [
+		{
+			"name": "base-test",
+			"hidden": true,
+			"output": { "outputOnFailure": true },
+			"execution": { "noTestsAction": "error", "stopOnFailure": true }
+		},
+		{
+			"name": "ninja",
+			"inherits": "base-test",
+			"configurePreset": "ninja",
+			"configuration": "Debug"
+		},
+		{
+			"name": "ninja-release",
+			"inherits": "ninja",
+			"configuration": "Release"
+		},
+		{
+			"name": "vs",
+			"inherits": "base-test",
+			"configurePreset": "vs",
+			"configuration": "Debug"
+		},
+		{
+			"name": "vs-release",
+			"inherits": "vs",
+			"configuration": "Release"
+		}
 	]
 }

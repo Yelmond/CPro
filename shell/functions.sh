@@ -83,6 +83,21 @@ function func_run {
 	"${CPRO_WORK}/$1/project/src/app/Debug/app.exe" || return $?
 }
 
+function func_test {
+	if [ -z "$1" ]; then
+		${CPRO_CMAKE} --list-presets || return $?
+		return 1
+	fi
+
+	if [ ! -d "${CPRO_WORK}/$1" ]; then
+		echo "Available options:"
+		ls ${CPRO_WORK}
+		return 1
+	fi
+
+	${CPRO_CTEST} --preset $1 || return $?
+}
+
 function func_br {
 	if [ ! -d "${CPRO_WORK}/$1" ]; then
 		func_project $1 || return $?
@@ -90,6 +105,15 @@ function func_br {
 
 	func_build $1 || return $?
 	func_run $1 || return $?
+}
+
+function func_bt {
+	if [ ! -d "${CPRO_WORK}/$1" ]; then
+		func_project $1 || return $?
+	fi
+
+	func_build $1 || return $?
+	func_test $1 || return $?
 }
 
 function func_resetlocal {
