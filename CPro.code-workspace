@@ -56,7 +56,22 @@
 		"editor.autoClosingQuotes": "never",
 		"editor.renderWhitespace": "all",
 		"editor.tabSize": 4,
-		"editor.insertSpaces": false
+		"editor.insertSpaces": false,
+		"cmake.configureOnOpen": false
+	},
+	"extensions": {
+		"recommendations": [
+			"ms-vscode.cpptools-extension-pack",
+			"webfreak.debug",
+			"GitHub.copilot",
+			"GitHub.copilot-chat",
+			"eamodio.gitlens",
+			"MS-vsliveshare.vsliveshare"
+		],
+		"unwantedRecommendations": [
+			"ms-edgedevtools.vscode-edge-devtools",
+			"DavidAnson.vscode-markdownlint"
+		]
 	},
 	"folders": [
 		{
