@@ -1,6 +1,6 @@
 project( ui_test )
 
-add_executable( ui_test ui_test_widget.cpp )
+add_executable( ui_test ui_test_widget.cpp  "ui_test_enums.cpp")
 
 find_package( GTest CONFIG REQUIRED )
 
