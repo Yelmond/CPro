@@ -1,9 +1,8 @@
 include_guard( GLOBAL )
 
-macro ( init_cxx )
+macro ( init )
 
-	set( CMAKE_CXX_STANDARD 23 )
-	set( CMAKE_CXX_STANDARD_REQUIRED ON )
-	set( CMAKE_CXX_EXTENSIONS OFF )
+	# Nothing to do yet. Just testing CMake module includes path.
+	message( STATUS "CPro: CMake module invoked successfully." )
 
 endmacro ()

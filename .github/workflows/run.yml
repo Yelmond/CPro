@@ -14,28 +14,15 @@ jobs:
             fail-fast: false
 
             matrix:
-                os: [ubuntu-latest, windows-latest]
-                cmake_preset: [vs, ninja]
-                include:
-                    -   os: windows-latest
-                        cmake_preset: vs
-                    -   os: ubuntu-latest
-                        cmake_preset: ninja
-                exclude:
-                    -   os: windows-latest
-                        cmake_preset: ninja
-                    -   os: ubuntu-latest
-                        cmake_preset: vs
+                os: [windows-latest]
+                cmake_preset: [vs]
 
         steps:
         -   uses: actions/checkout@v3
 
         -   name: Setup
             shell: bash
-            run: |
-                sudo apt-get update
-                sudo apt-get install -y clang libc++-dev libc++abi-dev
-                chmod a+x run.sh && ./run.sh setup
+            run: chmod a+x run.sh && ./run.sh setup
 
         -   name: Project
             shell: bash

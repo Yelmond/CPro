@@ -20,7 +20,10 @@
 			"installDir": "${sourceDir}/.work/${presetName}/install",
 			"cacheVariables": {
 				"CMAKE_MODULE_PATH": "${sourceDir}/cmake",
-				"CMAKE_EXPORT_COMPILE_COMMANDS": "YES"
+				"CMAKE_EXPORT_COMPILE_COMMANDS": "YES",
+				"CMAKE_CXX_STANDARD": "23",
+				"CMAKE_CXX_STANDARD_REQUIRED": "ON",
+				"CMAKE_CXX_EXTENSIONS": "OFF"
 			},
 			"environment": {
 				"PATH": "${sourceDir}/.local/cmake/bin:$penv{PATH}"
@@ -45,9 +48,7 @@
 			"hidden": true,
 			"cacheVariables": {
 				"CMAKE_C_COMPILER": "clang",
-				"CMAKE_CXX_COMPILER": "clang++",
-				"CMAKE_CXX_FLAGS": "-stdlib=libc++",
-				"CMAKE_EXE_LINKER_FLAGS": "-stdlib=libc++"
+				"CMAKE_CXX_COMPILER": "clang++"
 			}
 		},
 
