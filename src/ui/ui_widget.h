@@ -2,8 +2,6 @@
 #include "ui_enums.h"
 
 namespace UI {
-
-
 	class Widget {
 		public:
 			ui_EXPORTS Widget();
