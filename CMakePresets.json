@@ -11,7 +11,7 @@
 			"hidden": true,
 			"vendor": {
 				"microsoft.com/VisualStudioSettings/CMake/1.0": {
-					"hostOS": ["Windows", "Linux", "Darwin"],
+					"hostOS": ["Windows", "Linux", "macOS"],
 					"hostArch": ["x64", "arm64"]
 				}
 			},
