@@ -58,7 +58,8 @@
 		"editor.tabSize": 4,
 		"editor.insertSpaces": false,
 		"cmake.configureOnOpen": false,
-		"dotnet.defaultSolution": "disable"
+		"dotnet.defaultSolution": "disable",
+		"C_Cpp.default.configurationProvider": "ms-vscode.cpptools"
 	},
 	"extensions": {
 		"recommendations": [
