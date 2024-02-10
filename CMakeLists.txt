@@ -4,7 +4,7 @@ enable_testing()
 
 include( init )
 
-set( CMAKE_CXX_STANDARD 20 )
+set( CMAKE_CXX_STANDARD 23 )
 
 project( CPro VERSION 1.0 LANGUAGES CXX )
 
