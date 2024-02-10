@@ -57,7 +57,8 @@
 		"editor.renderWhitespace": "all",
 		"editor.tabSize": 4,
 		"editor.insertSpaces": false,
-		"cmake.configureOnOpen": false
+		"cmake.configureOnOpen": false,
+		"dotnet.defaultSolution": "disable"
 	},
 	"extensions": {
 		"recommendations": [
