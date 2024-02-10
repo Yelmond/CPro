@@ -65,7 +65,9 @@ function func_build {
 		return 1
 	fi
 
+	echo "Build:" || return $?
 	${CPRO_CMAKE} --build --preset $1 || return $?
+	echo "" || return $? # Just to add some space after the build output.
 }
 
 function func_run {
@@ -80,6 +82,7 @@ function func_run {
 		return 1
 	fi
 
+	echo "Run:" || return $?
 	"${CPRO_WORK}/$1/project/src/app/Debug/app.exe" || return $?
 }
 
@@ -95,6 +98,7 @@ function func_test {
 		return 1
 	fi
 
+	echo "Test:" || return $?
 	${CPRO_CTEST} --preset $1 || return $?
 }
 
