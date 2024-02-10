@@ -11,7 +11,7 @@ jobs:
         runs-on: ${{ matrix.os }}
 
         strategy:
-            fail-fast: false
+            fail-fast: true
 
             matrix:
                 os: [ubuntu-latest, windows-latest]
@@ -32,7 +32,10 @@ jobs:
 
         -   name: Setup
             shell: bash
-            run: chmod a+x run.sh && ./run.sh setup
+            run: |
+                sudo apt-get update
+                sudo apt-get install -y clang libc++-dev libc++abi-dev
+                chmod a+x run.sh && ./run.sh setup
 
         -   name: Project
             shell: bash
