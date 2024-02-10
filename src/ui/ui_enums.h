@@ -1,6 +1,8 @@
 #pragma once
 #include <type_traits>
 #include <concepts>
+#include <stdexcept>
+#include <expected>
 
 namespace UI {
 	enum class PseudoStates : short {
@@ -12,6 +14,38 @@ namespace UI {
 		Root		= 1 << 5
 	};
 
+	enum class LanguageDirection
+	{
+		Inherit,
+		LTR,
+		RTL
+	};
+
+	enum class LanguageDirection2
+	{
+		Inherit,
+		LTR,
+		RTL
+	};
+
+	inline auto toTextCore(LanguageDirection dir)
+	{
+		switch (dir)
+		{
+		case LanguageDirection::Inherit:
+		case LanguageDirection::LTR:
+			return LanguageDirection2::LTR;
+		case LanguageDirection::RTL:
+			return LanguageDirection2::RTL;
+		default:
+			//return std::unexpected(std::out_of_range("impossible to convert value"));
+			throw new std::out_of_range("impossible to convert value");
+		}
+	}
+
+	////////////////////////////////////////////////////////////////////////////////////////
+	// Utility Methods
+	
 	template< typename T >
 	concept EnumConcept = std::is_enum_v<T>;
 
@@ -33,4 +67,6 @@ namespace UI {
 	inline bool hasFlag( TEnum a, TEnum b ) {
 		return ( a & b ) == b;
 	}
+
+
 }
