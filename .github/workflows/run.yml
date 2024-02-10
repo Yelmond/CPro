@@ -15,31 +15,23 @@ jobs:
 
             matrix:
                 os: [ubuntu-latest, windows-latest]
-                build_type: [Release]
-                c_compiler: [clang, cl]
                 cmake_preset: [vs, ninja]
                 include:
                     -   os: windows-latest
-                        c_compiler: cl
-                        cpp_compiler: cl
                         cmake_preset: vs
                     -   os: ubuntu-latest
-                        c_compiler: clang
-                        cpp_compiler: clang++
                         cmake_preset: ninja
                 exclude:
                     -   os: windows-latest
-                        c_compiler: clang
                         cmake_preset: ninja
                     -   os: ubuntu-latest
-                        c_compiler: cl
                         cmake_preset: vs
 
         steps:
         -   uses: actions/checkout@v3
 
         -   name: Setup
-            run: ./run.sh setup
+            run: chmod a+x run.sh && ./run.sh setup
 
         -   name: Project
             run: ./run.sh project ${{ matrix.cmake_preset }}
