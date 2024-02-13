@@ -2,7 +2,9 @@
 #include <fmt/format.h>
 
 namespace UI {
-	Widget::Widget() {
+	Widget::Widget( int num )
+		: field( num )
+	{
 		fmt::print( "Widget created.\n" );
 	}
 

@@ -1,21 +1,18 @@
 #include <gtest/gtest.h>
+#include "../../src/ui/ui_widget.h"
 
-// Mock function (replace this with your actual function from the app project)
-int add( int a, int b ) {
-	return a + b;
-}
+TEST( WidgetTest, Widget ) {
+	UI::Widget w( 1 );
+	EXPECT_EQ( w.getField(), 1 );
 
-// Test case for the add function
-TEST( AdditionTest, HandlesPositiveNumbers ) {
-	EXPECT_EQ( add( 1, 2 ), 3 );
-}
+	{
+		UI::Widget child( 24890324 );
+		w.addChild( child );
 
-TEST( AdditionTest, HandlesNegativeNumbers ) {
-	EXPECT_EQ( add( -1, -2 ), -3 );
-}
+		EXPECT_EQ( w.getChild( 0 ).getField(), 24890324 );
+	}
 
-TEST( AdditionTest, HandlesMixedNumbers ) {
-	EXPECT_EQ( add( -1, 2 ), 1 );
+	EXPECT_EQ( w.getChild( 0 ).getField(), 24890324 );
 }
 
 // Main function
