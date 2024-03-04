@@ -6,31 +6,52 @@ namespace UI {
 	class Widget {
 	public:
 		ui_EXPORTS Widget( int num );
+		ui_EXPORTS Widget( float num );
+		ui_EXPORTS Widget( const Widget & ) = delete;
+		ui_EXPORTS Widget( Widget && );
 		ui_EXPORTS ~Widget();
 
+	private:
+		template< typename... TArgs >
+		Widget( Widget & parent, TArgs &&... args )
+			: Widget( std::forward< TArgs >( args )... )
+			, mParent( &parent )
+		{}
+
 	public:
-		void addChild( Widget & widget );
+		Widget & addChild( Widget && widget );
+		Widget & addChild( int num );
 		Widget & getChild( int index );
 
+		[[ nodiscard ]] size_t getChildCount() const;
 		[[ nodiscard ]] int getField() const;
 
 	private:
-		std::vector< Widget * > widgets;
+		Widget * mParent;
+		std::vector< Widget > mWidgets;
 
-		int field;
+		int mField;
 	};
 
 	////
 
-	inline void Widget::addChild( Widget & widget ) {
-		widgets.emplace_back( &widget );
+	inline Widget & Widget::addChild( Widget && widget ) {
+		return mWidgets.emplace_back( *this, std::forward< Widget >( widget ) );
+	}
+
+	inline Widget & Widget::addChild( int num ) {
+		return mWidgets.emplace_back( *this, num );
 	}
 
 	inline Widget & Widget::getChild( int index ) {
-		return *widgets[ index ];
+		return mWidgets[ index ];
+	}
+
+	inline size_t Widget::getChildCount() const {
+		return mWidgets.size();
 	}
 
 	inline int Widget::getField() const {
-		return field;
+		return mField;
 	}
 }

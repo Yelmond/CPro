@@ -3,9 +3,26 @@
 
 namespace UI {
 	Widget::Widget( int num )
-		: field( num )
+		: mParent( nullptr )
+		, mField( num )
 	{
 		fmt::print( "Widget created.\n" );
+	}
+
+	Widget::Widget( float num )
+		: mParent( nullptr )
+		, mField( static_cast< int >( num ) )
+	{
+		fmt::print( "Widget created.\n" );
+	}
+
+	Widget::Widget( Widget && other )
+		: mParent( other.mParent )
+		, mWidgets( std::move( other.mWidgets ) )
+		, mField( other.mField )
+	{
+		other.mField = 0;
+		fmt::print( "Widget moved.\n" );
 	}
 
 	Widget::~Widget() {
