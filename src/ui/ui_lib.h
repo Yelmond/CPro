@@ -1,4 +1,6 @@
-#ifdef WIN32
+#pragma once
+
+#ifdef _WIN32
 	#ifndef ui_EXPORT
 		#define ui_EXPORTS __declspec( dllexport )
 	#else
