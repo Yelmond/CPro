@@ -1,12 +1,32 @@
+#pragma once
+
 #include "ui_lib.h"
 #include "ui_enums.h"
 #include <vector>
 
 namespace UI {
-	class Widget {
+	template< typename T >
+	class WidgetAllocator : public std::allocator< T > {
 	public:
-		ui_EXPORTS Widget( int num );
-		ui_EXPORTS Widget( float num );
+		template< typename U, typename... Args >
+		void construct( U * p, Args &&... args ) {
+			::new( reinterpret_cast< void * >( p ) ) U(
+				std::forward< Args >( args )... );
+		}
+
+		template< typename U >
+		struct rebind {
+			using other = WidgetAllocator< U >;
+		};
+	};
+
+	class Widget {
+	private:
+		ui_EXPORTS Widget();
+		ui_EXPORTS explicit Widget( int num );
+		ui_EXPORTS explicit Widget( float num );
+
+	public:
 		ui_EXPORTS Widget( const Widget & ) = delete;
 		ui_EXPORTS Widget( Widget && );
 		ui_EXPORTS ~Widget();
@@ -15,20 +35,27 @@ namespace UI {
 		template< typename... TArgs >
 		Widget( Widget & parent, TArgs &&... args )
 			: Widget( std::forward< TArgs >( args )... )
-			, mParent( &parent )
-		{}
+		{
+			mParent = &parent;
+		}
 
 	public:
 		Widget & addChild( Widget && widget );
-		Widget & addChild( int num );
+		template< typename... TArgs > Widget & createChild( TArgs &&... args );
+
 		Widget & getChild( int index );
 
 		[[ nodiscard ]] size_t getChildCount() const;
 		[[ nodiscard ]] int getField() const;
 
 	private:
+		using WidgetContainer = std::vector< Widget, WidgetAllocator< Widget > >;
+
+		friend class Panel;
+		friend class WidgetAllocator< Widget >;
+
 		Widget * mParent;
-		std::vector< Widget > mWidgets;
+		WidgetContainer mWidgets;
 
 		int mField;
 	};
@@ -39,8 +66,9 @@ namespace UI {
 		return mWidgets.emplace_back( *this, std::forward< Widget >( widget ) );
 	}
 
-	inline Widget & Widget::addChild( int num ) {
-		return mWidgets.emplace_back( *this, num );
+	template< typename... TArgs >
+	inline Widget & Widget::createChild( TArgs &&... args ) {
+		return mWidgets.emplace_back( *this, std::forward< TArgs >( args )... );
 	}
 
 	inline Widget & Widget::getChild( int index ) {

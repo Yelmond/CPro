@@ -2,6 +2,13 @@
 #include <fmt/format.h>
 
 namespace UI {
+	Widget::Widget()
+		: mParent( nullptr )
+		, mField( 0 )
+	{
+		fmt::print( "Widget created.\n" );
+	}
+
 	Widget::Widget( int num )
 		: mParent( nullptr )
 		, mField( num )
@@ -21,6 +28,7 @@ namespace UI {
 		, mWidgets( std::move( other.mWidgets ) )
 		, mField( other.mField )
 	{
+		other.mParent = nullptr;
 		other.mField = 0;
 		fmt::print( "Widget moved.\n" );
 	}

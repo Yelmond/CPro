@@ -1,15 +1,19 @@
 #include <gtest/gtest.h>
 #include "../../src/ui/ui_widget.h"
+#include "../../src/ui/ui_panel.h"
 
 using W = UI::Widget;
+using P = UI::Panel;
 
 TEST( Widget, AddChild ) {
-	W w( 1 );
+	P p;
+
+	auto & w = p.createChild( 1 );
 	EXPECT_EQ( w.getField(), 1 );
 
 	{
-		W child( 24890324 );
-		child.addChild( 43574 );
+		auto & child = p.createChild( 24890324 );
+		child.createChild( 43574 );
 
 		w.addChild( std::move( child ) );
 
@@ -22,11 +26,13 @@ TEST( Widget, AddChild ) {
 }
 
 TEST( Widget, MoveChild ) {
-	W parent1( 1 );
-	W parent2( 2 );
+	P p;
 
-	parent1.addChild( 3 );
-	parent2.addChild( 4 );
+	auto & parent1 = p.createChild( 1 );
+	auto & parent2 = p.createChild( 2 );
+
+	parent1.createChild( 3 );
+	parent2.createChild( 4 );
 
 	auto & child3 = parent1.getChild( 0 );
 
