@@ -15,6 +15,7 @@ Add GitHub Actions:
 
 CMake:
 - ui should be a SHARED library, but that doesn't compile atm
+- use https://cmake.org/cmake/help/latest/manual/cmake-presets.7.html
 
 Next Lessons:
 - std::views::iota
